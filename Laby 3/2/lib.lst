@@ -1,0 +1,61 @@
+     1                                  BITS 64
+     2                                  
+     3                                  section .text
+     4                                      global addInt
+     5                                      global subFloat
+     6                                      global nwd
+     7                                      extern _fun_modulo
+     8                                  
+     9                                  addInt:
+    10 00000000 55                          push rbp
+    11 00000001 4889E5                      mov rbp, rsp
+    12                                  
+    13 00000004 4889F8                      mov rax, rdi
+    14 00000007 4801F0                      add rax, rsi
+    15                                  
+    16 0000000A C9                          leave
+    17 0000000B C3                          ret
+    18                                  
+    19                                  subFloat:
+    20 0000000C 55                          push rbp
+    21 0000000D 4889E5                      mov rbp, rsp
+    22                                  
+    23 00000010 F30F5CC1                    subss xmm0, xmm1
+    24                                  
+    25 00000014 C9                          leave
+    26 00000015 C3                          ret
+    27                                  
+    28                                  nwd:
+    29 00000016 4883FE00                    cmp rsi, 0
+    30 0000001A 740E                        je _end 
+    31 0000001C 7500                        jne _calc
+    32                                      
+    33                                  _calc:
+    34 0000001E E80C000000                  call _fun_modulo
+    35 00000023 56                          push rsi    
+    36 00000024 4889C6                      mov rsi, rax
+    37 00000027 5F                          pop rdi
+    38 00000028 EBEC                        jmp nwd
+    39                                  
+    40                                  _end:
+    41 0000002A 4889F8                      mov rax, rdi
+    42 0000002D C9                          leave
+    43 0000002E C3                          ret
+    44                                  
+    45                                  _fun_modulo:
+    46 0000002F 4883FE00                    cmp rsi, 0
+    47 00000033 740B                        je _devide_by_zero
+    48                                  
+    49 00000035 4831D2                      xor rdx, rdx
+    50                                  
+    51 00000038 4889F8                      mov rax, rdi
+    52 0000003B 48F7F6                      div rsi                 ; devide rax / rsi, rdx = reminder
+    53 0000003E EB06                        jmp _exit
+    54                                  
+    55                                  _devide_by_zero:
+    56 00000040 B800000000                  mov rax, 0
+    57 00000045 C3                          ret
+    58                                  
+    59                                  _exit:
+    60 00000046 4889D0                      mov rax, rdx            ; move reminder (result of modulo) to rax
+    61 00000049 C3                          ret

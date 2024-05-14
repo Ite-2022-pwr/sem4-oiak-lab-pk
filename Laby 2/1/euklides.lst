@@ -1,0 +1,46 @@
+     1                                  section .text
+     2                                      global main
+     3                                  
+     4                                  main:
+     5 00000000 BF31000000                  mov rdi, 49
+     6 00000005 BE07000000                  mov rsi, 7
+     7 0000000A EB00                        jmp _euklides
+     8                                  
+     9                                  _euklides:
+    10 0000000C 4883FE00                    cmp rsi, 0
+    11 00000010 7424                        je _end
+    12 00000012 7500                        jne _calc
+    13                                      
+    14                                  _calc:
+    15 00000014 E807000000                  call _modulo
+    16 00000019 56                          push rsi
+    17 0000001A 4889D6                      mov rsi, rdx
+    18 0000001D 5F                          pop rdi
+    19 0000001E EBEC                        jmp _euklides
+    20                                  
+    21                                  _modulo:            ; rdi - a, rsi - b
+    22 00000020 4883FE00                    cmp rsi, 0
+    23 00000024 740A                        je _devide_by_zero
+    24                                  
+    25 00000026 4831D2                      xor rdx, rdx    ; zerwoanie reszty z dzielenia
+    26 00000029 4889F8                      mov rax, rdi
+    27 0000002C 48F7F6                      div rsi         ; wynik w rax, rdx - reszta
+    28 0000002F C3                          ret
+    29                                  
+    30                                  _devide_by_zero:
+    31 00000030 B800000000                  mov rax, 0
+    32 00000035 C3                          ret
+    33                                  
+    34                                  _end:
+    35 00000036 4889F8                      mov rax, rdi
+    36                                  
+    37                                  ;_print_and_exit:
+    38                                  ;    mov	rax, 1		; 1 = wypisz
+    39                                  ;	mov	rdi, 1		; 1 = stdout
+    40                                  ;	mov	rsi, rax	; lancuch do wyswietlenia
+    41                                  ;	mov	rdx, 8		; dlugosc lancucha, bez 0
+    42                                  ;	syscall			; wywolanie funkcji systemu operacyjnego
+    43                                  ;
+    44                                  ;	mov	rax, 60		; 60 = wyjscie
+    45                                  ;	mov	rdi, 0		; 0 = wyjsciowy kod sygnalizujacy sukces
+    46                                  ;	syscall			; zakoncz

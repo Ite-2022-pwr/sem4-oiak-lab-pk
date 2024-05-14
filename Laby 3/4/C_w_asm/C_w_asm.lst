@@ -1,0 +1,46 @@
+     1                                  BITS 64
+     2                                  
+     3                                  section .data
+     4                                      extern tab
+     5 00000000 25642000                    printfFormat db "%d ",0
+     6                                  
+     7                                  section .rodata
+     8                                      extern len
+     9                                  
+    10                                  section .text
+    11                                      global main
+    12                                      extern printf
+    13                                  
+    14                                  main:
+    15 00000000 55                          push rbp
+    16 00000001 4889E5                      mov rbp, rsp
+    17                                  
+    18 00000004 8B0425[00000000]            mov eax, dword [len]
+    19 0000000B 4989C2                      mov r10, rax
+    20 0000000E 4C89D1                      mov rcx, r10
+    21                                  
+    22 00000011 B801000000                  mov rax, 1
+    23                                  
+    24                                  _loop:
+    25 00000016 4C89D3                      mov rbx, r10
+    26 00000019 4829CB                      sub rbx, rcx
+    27                                      
+    28 0000001C 51                          push rcx
+    29 0000001D 4152                        push r10
+    30                                  
+    31 0000001F 8B349D[00000000]            mov esi, dword [tab + rbx * 4]
+    32 00000026 F7EE                        imul esi
+    33                                  
+    34 00000028 B80A000000                  mov rax, 10
+    35 0000002D 48BF-                       mov rdi, printfFormat
+    35 0000002F [0000000000000000] 
+    36 00000037 B800000000                  mov rax, 0
+    37 0000003C E8(00000000)                call printf
+    38                                      
+    39 00000041 415A                        pop r10
+    40 00000043 59                          pop rcx
+    41                                  
+    42 00000044 E2D0                        loop _loop
+    43                                  
+    44 00000046 C9                          leave
+    45 00000047 C3                          ret

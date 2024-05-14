@@ -1,0 +1,14 @@
+     1                                  BITS 64
+     2                                  
+     3                                  section .data
+     4                                      global string
+     5                                      global integer
+     6                                  
+     7 00000000 416C614D614B6F7461-     string db "AlaMaKota", 0
+     7 00000009 00                 
+     8 0000000A 1A000000                integer dd 26
+     9                                  
+    10                                  section .rodata
+    11                                      global e
+    12                                  
+    13 00000000 7B142E40                e dd 2.72
